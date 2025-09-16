@@ -24,7 +24,7 @@ const MenuIcon = () => (
 
 // AXIOS API SETUP
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'https://agentic-ai-bxvh.onrender.com/api',
   withCredentials: true,
 });
 // LOADING BAR
