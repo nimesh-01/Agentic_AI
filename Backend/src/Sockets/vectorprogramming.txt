@@ -1,0 +1,19 @@
+1. message send by user is first stored in database
+
+2.generate vector for user message
+
+3. query memory(by vector in vector database)
+
+4. create memory(by vector in vector database)
+
+5.get chathistory from the DB (few numbers)
+
+6.filter Short term and long term memory
+
+7.generate res from the AI by STM and LTM
+
+8.Ai res is saved in DB
+
+9.generate vector for Ai response
+
+10. create memory for Ai res  in vector database
