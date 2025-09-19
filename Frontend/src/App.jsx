@@ -194,7 +194,7 @@ function ChatPage({ user, onLogout }) {
   const [newChatTitle, setNewChatTitle] = useState('');
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3000', { withCredentials: true });
+    const newSocket = io('https://agentic-ai-bxvh.onrender.com', { withCredentials: true });
     setSocket(newSocket);
 
     const fetchChats = async () => {
