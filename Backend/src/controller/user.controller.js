@@ -21,7 +21,12 @@ async function registerController(req, res) {
         password: hashedPassword
     })
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    res.cookie('token', token)
+    res.cookie('token', token, {
+        httpOnly: true,       // ✅ cannot be accessed via JS (protects from XSS)
+        secure: true,         // ✅ cookie only sent over HTTPS
+        sameSite: "Strict",   // ✅ prevents CSRF by not sending cookie to other domains
+        maxAge: 7 * 24 * 60 * 60 * 1000 // ✅ 7 days expiry
+    })
 
     res.status(200).json({
         msg: "user Regisered successfully",
@@ -35,12 +40,17 @@ async function loginController(req, res) {
     const valid = await bcrypt.compare(password, isUserExist.password)
     if (valid) {
         const token = jwt.sign({ id: isUserExist._id }, process.env.JWT_SECRET)
-        res.cookie('token', token)
+        res.cookie('token', token, {
+            httpOnly: true,       // ✅ cannot be accessed via JS (protects from XSS)
+            secure: true,         // ✅ cookie only sent over HTTPS
+            sameSite: "Strict",   // ✅ prevents CSRF by not sending cookie to other domains
+            maxAge: 7 * 24 * 60 * 60 * 1000 // ✅ 7 days expiry
+        })
         return res.status(200).json({
             msg: "User Loged in",
             isUserExist
         })
-    }    res.status(401).json({
+    } res.status(401).json({
         msg: "Incorrect password"
     })
 }
@@ -49,8 +59,8 @@ async function logoutController(req, res) {
     try {
         res.clearCookie("token", {
             httpOnly: true,   // prevent client-side access to cookie
-            secure: process.env.NODE_ENV === "production", // only https in prod
-            sameSite: "strict" // CSRF protection
+            secure: true, // only https in prod
+            sameSite: "Strict" // CSRF protection
         });
 
         return res.status(200).json({
