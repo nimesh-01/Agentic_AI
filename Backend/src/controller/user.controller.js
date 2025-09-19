@@ -24,7 +24,7 @@ async function registerController(req, res) {
     res.cookie('token', token, {
         httpOnly: true,       // ✅ cannot be accessed via JS (protects from XSS)
         secure: true,         // ✅ cookie only sent over HTTPS
-        sameSite: "Strict",   // ✅ prevents CSRF by not sending cookie to other domains
+        sameSite: "None",   // ✅ prevents CSRF by not sending cookie to other domains
         maxAge: 7 * 24 * 60 * 60 * 1000 // ✅ 7 days expiry
     })
 
@@ -43,7 +43,7 @@ async function loginController(req, res) {
         res.cookie('token', token, {
             httpOnly: true,       // ✅ cannot be accessed via JS (protects from XSS)
             secure: true,         // ✅ cookie only sent over HTTPS
-            sameSite: "Strict",   // ✅ prevents CSRF by not sending cookie to other domains
+            sameSite: "None",   // ✅ prevents CSRF by not sending cookie to other domains
             maxAge: 7 * 24 * 60 * 60 * 1000 // ✅ 7 days expiry
         })
         return res.status(200).json({
@@ -60,7 +60,7 @@ async function logoutController(req, res) {
         res.clearCookie("token", {
             httpOnly: true,   // prevent client-side access to cookie
             secure: true, // only https in prod
-            sameSite: "Strict" // CSRF protection
+            sameSite: "None" // CSRF protection
         });
 
         return res.status(200).json({
