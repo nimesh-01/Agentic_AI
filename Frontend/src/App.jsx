@@ -24,7 +24,7 @@ const MenuIcon = () => (
 
 // AXIOS API SETUP
 const api = axios.create({
-  baseURL: 'https://agentic-ai-bxvh.onrender.com/api',
+  baseURL: 'https://agenticais.netlify.app/api',
   withCredentials: true,
 });
 // LOADING BAR
