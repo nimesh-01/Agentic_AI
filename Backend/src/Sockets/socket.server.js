@@ -9,7 +9,7 @@ const { createMemory, queryMemory } = require("../services/vector.service")
 function initSocketServer(httpServer) {
     const io = new Server(httpServer, {
         cors: {
-            origin: "https://agentic-ai-01.onrender.com",
+            origin: "https://agenticais.netlify.app",
             methods: ["GET", "POST"],
             credentials: true
         }
