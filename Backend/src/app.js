@@ -8,7 +8,7 @@ const chatroutes = require('./routes/chat.routes')
 const app = express()
 
 app.use(cors({
-  origin: "https://agentic-ai-01.onrender.com",
+  origin: "https://agenticais.netlify.app",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }))
