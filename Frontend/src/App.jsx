@@ -218,7 +218,7 @@ function ChatPage({ user, onLogout }) {
   const createNewChat = async () => {
     if (!newChatTitle.trim()) return;
     try {
-      const response = await api.post('/chat', { title: newChatTitle.trim() });
+      const response = await api.post('/chat', { "title": newChatTitle.trim() });
       const chat = response.data.chat;
       setChats(prev => [chat, ...prev]);
       setActiveChat(chat);
