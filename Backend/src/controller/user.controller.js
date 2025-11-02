@@ -4,14 +4,11 @@ const bcrypt = require('bcryptjs')
 
 async function registerController(req, res) {
     const { username, email_id, password } = req.body
-    const isuser = await userModel.findOne({
-        $or: [
-            { username: username },
-            { email_id: email_id }
-        ]
-    })
-    if (isuser) {
-        return res.status(404).send("User already exist");
+    const existingUsername = await userModel.findOne({ username: username });
+    const existingEmail = await userModel.findOne({ email_id: email_id });
+
+    if (existingUsername || existingEmail) {
+        return res.status(400).json({ message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
