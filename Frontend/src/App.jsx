@@ -19,7 +19,7 @@ const LogoutIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm10.72 4.72a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H9a.75.75 0 0 1 0-1.5h10.94l-1.72-1.72a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" /></svg>
 );
 const MenuIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" /></svg>
 );
 
 // AXIOS API SETUP
@@ -31,9 +31,8 @@ const api = axios.create({
 function LoadingBar({ loading }) {
   return (
     <div
-      className={`fixed top-0 left-0 h-1 bg-indigo-500 transition-all duration-300 z-50 ${
-        loading ? 'w-full opacity-100' : 'w-0 opacity-0'
-      }`}
+      className={`fixed top-0 left-0 h-1 bg-indigo-500 transition-all duration-300 z-50 ${loading ? 'w-full opacity-100' : 'w-0 opacity-0'
+        }`}
     />
   );
 }
@@ -43,14 +42,14 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [apiLoading, setApiLoading] = useState(false);
-  
+
   useEffect(() => {
     // Request interceptor
     const requestInterceptor = api.interceptors.request.use((config) => {
       setApiLoading(true);
       return config;
     });
-  
+
     // Response interceptor
     const responseInterceptor = api.interceptors.response.use(
       (response) => {
@@ -62,14 +61,14 @@ export default function App() {
         return Promise.reject(error);
       }
     );
-  
+
     // Cleanup
     return () => {
       api.interceptors.request.eject(requestInterceptor);
       api.interceptors.response.eject(responseInterceptor);
     };
   }, []);
-  
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -90,15 +89,14 @@ export default function App() {
     try {
       await api.post('/logout');
     } catch (e) {
-       setError("Logout failed")
+      setError("Logout failed")
     }
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     setUser(null);
   };
 
   if (loading) return <div className="flex items-center justify-center h-screen bg-gray-900 text-white">Loading...</div>;
 
-   return (
+  return (
     <div className="h-screen w-screen bg-gray-900 text-gray-100 font-sans">
       {/* ⬇️ ADD THIS ON LINE ~110 */}
       <LoadingBar loading={apiLoading} />
@@ -116,7 +114,7 @@ function AuthPage({ onAuth }) {
     <div className="flex flex-col items-center justify-center h-full bg-gray-800">
       <div className="w-full max-w-md p-8 space-y-8 bg-gray-900 rounded-2xl shadow-lg">
         <h1 className="text-3xl font-bold text-center text-white">{isLogin ? 'Welcome Back!' : 'Create Account'}</h1>
-        {isLogin ? <LoginForm onAuth={onAuth} /> : <RegisterForm onRegister={() => setIsLogin(true)} />}
+        {isLogin ? <LoginForm onAuth={onAuth} /> : <RegisterForm  onAuth={onAuth} />}
         <p className="text-center text-sm text-gray-400">
           {isLogin ? "Don't have an account? " : 'Already have an account? '}
           <button onClick={() => setIsLogin(!isLogin)} className="font-medium text-indigo-400 hover:text-indigo-300">
@@ -156,7 +154,7 @@ function LoginForm({ onAuth }) {
   );
 }
 
-function RegisterForm({ onRegister }) {
+function RegisterForm({ onAuth }) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -166,8 +164,10 @@ function RegisterForm({ onRegister }) {
     e.preventDefault();
     setError('');
     try {
-      await api.post('/register', { username, email_id: email, password });
-      onRegister();
+      const response = await api.post('/register', { username, email_id: email, password });
+      const user = response.data.user || response.data.isUserExist;
+      if (user) onAuth(user);
+      else setError(response.data.msg || 'Login failed');
     } catch (err) {
       setError(err.response?.data?.msg || 'Registration failed. Please try again.');
     }
@@ -321,11 +321,10 @@ function Sidebar({ user, chats, activeChat, setActiveChat, onNewChat, onLogout, 
           <div
             key={chat._id}
             onClick={() => setActiveChat(chat)}
-            className={`p-3 rounded-lg cursor-pointer mb-2 bg-gray-900  transition-colors ${
-              activeChat?._id === chat._id
-                ? 'bg-gray-700'
-                : 'hover:bg-gray-700/50'
-            }`}
+            className={`p-3 rounded-lg cursor-pointer mb-2 bg-gray-900  transition-colors ${activeChat?._id === chat._id
+              ? 'bg-gray-700'
+              : 'hover:bg-gray-700/50'
+              }`}
           >
             <p className="truncate">{chat.title}</p>
           </div>
