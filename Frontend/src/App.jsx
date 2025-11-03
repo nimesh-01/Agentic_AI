@@ -316,20 +316,46 @@ function Sidebar({ user, chats, activeChat, setActiveChat, onNewChat, onLogout, 
       </button>
 
       {/* Chats list (scrollable) */}
-      <div className="flex-grow overflow-y-auto hide-scrollbar">
-        {chats.map((chat) => (
-          <div
-            key={chat._id}
-            onClick={() => setActiveChat(chat)}
-            className={`p-3 rounded-lg cursor-pointer mb-2 bg-gray-900  transition-colors ${activeChat?._id === chat._id
-              ? 'bg-gray-700'
-              : 'hover:bg-gray-700/50'
-              }`}
-          >
-            <p className="truncate">{chat.title}</p>
-          </div>
-        ))}
-      </div>
+  <div className="flex-grow overflow-y-auto hide-scrollbar">
+  {chats.map((chat) => (
+    <div
+      key={chat._id}
+      className={`p-3 rounded-lg cursor-pointer mb-2 bg-gray-900 transition-colors flex justify-between items-center ${
+        activeChat?._id === chat._id ? 'bg-gray-700' : 'hover:bg-gray-700/50'
+      }`}
+    >
+      <p
+        className="truncate flex-1"
+        onClick={() => setActiveChat(chat)}
+      >
+        {chat.title}
+      </p>
+
+      {/* Delete button */}
+      <button
+        onClick={async (e) => {
+          e.stopPropagation(); // Prevent triggering setActiveChat
+          try {
+            const response = await api.get(`/chat/delete/${chat._id}`);
+            if (response) {
+              // Optionally update local state to remove deleted chat
+              setChats((prev) => prev.filter((c) => c._id !== chat._id));
+              if (activeChat?._id === chat._id) setActiveChat(null);
+            } else {
+              console.error('Failed to delete chat');
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        }}
+        className="ml-2 px-2 py-1 text-sm bg-red-600 hover:bg-red-700 rounded"
+      >
+        Delete
+      </button>
+    </div>
+  ))}
+</div>
+
     </aside>
   );
 }
