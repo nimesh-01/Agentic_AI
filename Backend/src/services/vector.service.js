@@ -2,7 +2,7 @@ const { pinecone, Pinecone } = require("@pinecone-database/pinecone")
 const pc = new Pinecone({ apiKey: process.env.PINECONE_API })
 
 const agenticAi = pc.Index("agenticai");
-
+const ns = index.namespace('agenticai');
 // Store (or update) a memory in the vector database
 async function createMemory({ vectors, metadata, messageId }) {
     if (!vectors || vectors.length === 0) {
@@ -17,7 +17,6 @@ async function createMemory({ vectors, metadata, messageId }) {
         },
     ]);
 }
-
 // Query stored memories from the vector database
 async function queryMemory({ queryVector, limit = 5, metadata }) {
     const data = await agenticAi.query({
@@ -29,12 +28,15 @@ async function queryMemory({ queryVector, limit = 5, metadata }) {
 
     return data.matches;
 }
-async function deleteMemoriesByFilter(filter) {
-    try {
-        await agenticAi.delete({ filter: { chatId } });
-        console.log(`🧠 Pinecone vectors deleted for chatId: ${chatId}`);
-    } catch (err) {
-        console.error('⚠️ Pinecone delete error:', err);
-    }
+async function deleteMemoriesByFilter(chatId) {
+  try {
+    // Delete all vectors where metadata.chat equals chatId
+    const result = await ns.deleteMany({
+      chat: { $eq: chatId }  // Make sure 'chat' is the metadata field name
+    });
+    console.log(`🧠 Deleted vectors for chat: ${chatId}`, result);
+  } catch (err) {
+    console.error("⚠️ Pinecone delete error:", err);
+  }
 }
 module.exports = { createMemory, queryMemory ,deleteMemoriesByFilter}
