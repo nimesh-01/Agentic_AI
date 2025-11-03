@@ -2,7 +2,7 @@ const { pinecone, Pinecone } = require("@pinecone-database/pinecone")
 const pc = new Pinecone({ apiKey: process.env.PINECONE_API })
 
 const agenticAi = pc.Index("agenticai");
-const ns = index.namespace('agenticai');
+const ns = agenticAi.namespace('agenticai');
 // Store (or update) a memory in the vector database
 async function createMemory({ vectors, metadata, messageId }) {
     if (!vectors || vectors.length === 0) {
