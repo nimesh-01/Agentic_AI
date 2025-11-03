@@ -5,7 +5,7 @@ const agenticAi = pc.Index("agenticai");
 
 // Store (or update) a memory in the vector database
 async function createMemory({ vectors, metadata, messageId }) {
-     if (!vectors || vectors.length === 0) {
+    if (!vectors || vectors.length === 0) {
         console.error("❌ No vectors generated, skipping upsert");
         return;
     }
@@ -29,5 +29,12 @@ async function queryMemory({ queryVector, limit = 5, metadata }) {
 
     return data.matches;
 }
-
-module.exports = { createMemory, queryMemory }
+async function deleteMemoriesByFilter(filter) {
+    try {
+        await agenticAi.delete({ filter: { chatId } });
+        console.log(`🧠 Pinecone vectors deleted for chatId: ${chatId}`);
+    } catch (err) {
+        console.error('⚠️ Pinecone delete error:', err);
+    }
+}
+module.exports = { createMemory, queryMemory ,deleteMemoriesByFilter}
