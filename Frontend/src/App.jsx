@@ -263,7 +263,7 @@ function ChatPage({ user, onLogout }) {
 }
 
 // SIDEBAR
-function Sidebar({ user, chats, activeChat, setActiveChat, onNewChat, onLogout, sidebarOpen, setSidebarOpen }) {
+function Sidebar({ user, chats, setChats,activeChat, setActiveChat, onNewChat, onLogout, sidebarOpen, setSidebarOpen }) {
   return (
     <aside
       className={`fixed left-0 top-0 bottom-0 z-40 w-72 bg-gray-800 p-4 border-r border-gray-700 transform transition-transform duration-300 ease-in-out 
