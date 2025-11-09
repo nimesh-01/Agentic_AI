@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import toast from "react-hot-toast";
-import api from "../api";
+import api from "../api/api";
 
-import MainHeader from "../../components/MainHeader";
+import MainHeader from "../components/MainHeader";
 import ChatView from "./ChatView";
-import PlusIcon from "../../icons/PlusIcon";
-import LogoutIcon from "../../icons/LogoutIcon";
+import PlusIcon from "../icons/PlusIcon";
+import LogoutIcon from "../icons/LogoutIcon";
 
 export default function ChatPage({ user, onLogout }) {
   const [chats, setChats] = useState([]);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import api from "../api";
-import Input from "../../components/Input";
+import api from "../api/api";
+import Input from "../components/Input";
 
 export default function LoginForm({ onAuth }) {
   const [email, setEmail] = useState("");

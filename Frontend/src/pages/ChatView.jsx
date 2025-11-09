@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import api from "../api";
-import SendIcon from "../../icons/SendIcon";
-import Message from "../../components/Message";
+import api from "../api/api";
+import SendIcon from "../icons/SendIcon";
+import Message from "../components/Message";
 
 export default function ChatView({ chat, socket, messages, setMessages }) {
   const [input, setInput] = useState("");

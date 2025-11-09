@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BotIcon from "../../icons/BotIcon";
+import BotIcon from "../icons/BotIcon";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 
