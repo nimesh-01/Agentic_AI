@@ -68,5 +68,32 @@ async function logoutController(req, res) {
         });
     }
 }
+async function update_controller(req, res) {
+    try {
+        const { userId, username, email_id, password } = req.body;
 
-module.exports = { registerController, loginController, logoutController };
+        const updateData = { username, email_id };
+
+        // if password changed
+        if (password && password.trim().length > 0) {
+            const hashed = await bcrypt.hash(password, 10);
+            updateData.password = hashed;
+        }
+
+        const updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            updateData,
+            { new: true }
+        ).select("-password");
+
+        if (!updatedUser) {
+            return res.status(400).json({ success: false, msg: "User not found" });
+        }
+
+        res.json({ success: true, user: updatedUser });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, msg: "Server error" });
+    }
+}
+module.exports = { registerController, loginController, logoutController,update_controller };
