@@ -8,7 +8,7 @@ const chatroutes = require('./routes/chat.routes')
 const app = express()
 
 app.use(cors({
-  origin: true,
+  origin: ["https://agenticais.netlify.app", "http://localhost:5173"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }))
