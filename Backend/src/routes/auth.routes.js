@@ -14,7 +14,6 @@ router.get('/main', authUser, (req, res) => {
 router.post('/register', registerController)
 router.post('/login', loginController)
 router.post('/logout', logoutController)
-const express = require("express");
 router.put("/update-profile",update_controller );
 
 
